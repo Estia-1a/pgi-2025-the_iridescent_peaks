@@ -27,13 +27,25 @@ int main(int argc, char **argv) {
   /* Example with helloworld command
    * If helloworld is a called command: freud.exe -f images/input/image.jpeg -c helloworld 
    */
+  
   if ( strncmp( configuration.command, "helloworld", 10 ) == 0 ) {
     /* helloworld() function is defined in feature.h and implemented in feature.c */
     helloWorld();
   }
+
+  if ( strncmp( configuration.command, "dimension", 9 ) == 0 ) {
+      /* dimension() function is defined in feature.h and implemented in feature.c */
+      dimension( configuration.filenames[0] );
+  }
+
+  
   /*
    * TO COMPLETE
    */
   
   return 0;
 }
+
+/*
+./build/freud.exe -f ./images/input/image.jpeg -c dimension
+*/
