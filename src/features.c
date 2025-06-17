@@ -50,3 +50,8 @@ void second_line(char *source_path) {
 
     printf("second_line: %d, %d, %d\n", data[3 * width], data[3 * width + 1], data[3 * width + 2]);
 }
+
+void print_pixel(char *source_path){
+
+    
+}
