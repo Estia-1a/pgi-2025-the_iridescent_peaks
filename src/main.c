@@ -70,6 +70,13 @@ int main(int argc, char **argv) {
     }
     color_gray(configuration.filenames[0]);
   }
+  else if ( strncmp( configuration.command, "color_invert", 12) == 0){
+    if (configuration.filenames[0]== NULL){
+      fprintf(stderr,"Aucune image fourni.\n");
+      return 1;
+    }
+    color_invert(configuration.filenames[0]);
+  }
 
   return 0;
 }

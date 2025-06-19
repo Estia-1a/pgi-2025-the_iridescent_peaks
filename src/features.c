@@ -112,6 +112,33 @@ void color_green(const char *filename){
     }
     free(data);
  }
+  void color_invert(const char *filename){
+    unsigned char *data = NULL;
+    int width = 0, height = 0, channel_count = 0;
+    int success = read_image_data((char*)filename, &data, &width, &height, &channel_count);
+    if (success == 0 || data == NULL ){
+        fprintf(stderr,"Echec de la lecture de l'image : %s\n", filename);
+        return;
+    }
+
+    int pixel_count = width * height;
+    for (int i=0; i < pixel_count; ++i){
+        int index = i * channel_count;
+
+        if (channel_count >= 3){
+            data[index + 0] = 255 -data[index + 0];
+            data[index + 1] = 255 -data[index + 1];
+            data[index + 2] = 255 -data[index + 2];
+        }
+    }
+    int written = write_image_data("image_out.bmp", data, width, height);
+    if (written == 0){
+        fprintf(stderr, "Impossible d'écrire l'image de sortie.\n");
+    } else {
+        printf("Image créée : image_out.bmp(toute inversée)\n");
+    }
+    free(data);
+ }
  /* Do not forget to commit regurlarly your changes.
  * Your commit messages must contain "#n" with: n = number of the corresponding feature issue.
  * When the feature is totally implemented, your commit message must contain "close #n".
