@@ -15,7 +15,7 @@ pixelRGB* get_pixel(unsigned char* data, const unsigned int width, const unsigne
 }
 
 void print_pixel(char *filename,int x,int y){
-    char *data;
+    unsigned char *data;
     int width, height, channel_count;
 
     if (read_image_data(filename, &data, &width, &height, &channel_count) !=0 ) {
