@@ -147,3 +147,11 @@ void color_green(const char *filename){
 void helloWorld() {
     printf("Hello World !");
 }
+
+void dimension (char *source_path){
+    unsigned char *data;
+    int width, height, channels;
+    printf("dimension: %d, %d\n", width, height);
+
+}
+
