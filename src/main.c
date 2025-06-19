@@ -107,6 +107,9 @@ int main(int argc, char **argv) {
     max_component(configuration.filenames[0], configuration.command[14] );
   }
 
+  if ( strncmp( configuration.command, "min_component", 13) == 0) {
+    min_component(configuration.filenames[0], configuration.command[14] );
+  }
   return 0;
 }
 

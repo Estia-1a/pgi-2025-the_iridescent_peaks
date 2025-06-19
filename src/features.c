@@ -256,3 +256,37 @@ void max_component(char *source_path, char component) {
         
         free(data);
     }
+
+
+
+
+
+    void min_component(char *source_path, char component) {
+    unsigned char *data;
+    int width, height, channels;
+    int min_value = 255;
+    int best_pixel = 0;
+    int offset;
+
+    read_image_data(source_path, &data, &width, &height, &channels);
+
+    if (component == 'G') {
+        offset = 1;
+    } else if (component == 'B') {
+        offset = 2;
+    } else {
+        offset = 0;
+    }
+    for (int i = 0; i < width * height; i++) {
+            int value = data[i * 3 + offset];
+            if (value < min_value) {
+                min_value = value;
+                best_pixel = i;
+            }
+        }
+        
+        printf("min_component %c (%d, %d): %d\n", 
+            component, best_pixel % width, best_pixel / width, min_value);
+        
+        free(data);
+    }
