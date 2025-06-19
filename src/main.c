@@ -25,9 +25,33 @@ int main(int argc, char **argv) {
   /* Example with helloworld command
    * If helloworld is a called command: freud.exe -f images/input/image.jpeg -c helloworld 
    */
+  
   if ( strncmp( configuration.command, "helloworld", 10 ) == 0 ) {
     /* helloworld() function is defined in feature.h and implemented in feature.c */
     helloWorld();
+  }
+
+  if ( strncmp( configuration.command, "dimension", 9 ) == 0 ) {
+      dimension( configuration.filenames[0] );
+  }
+
+  if ( strncmp( configuration.command, "first_pixel", 11 ) == 0 ) {
+      first_pixel( configuration.filenames[0] );
+  }
+  
+
+  if ( strncmp( configuration.command, "tenth_pixel", 11)== 0 ) {
+      tenth_pixel( configuration.filenames[0] );
+  }
+
+  if ( strncmp( configuration.command, "second_line", 11 ) == 0 ) {
+    second_line( configuration.filenames[0] );
+  }
+
+  /*
+   * TO COMPLETE
+   */
+  
   } 
   if ( strncmp( configuration.command, "color_red", 9) == 0){
     if (configuration.filenames[0]== NULL){
@@ -80,3 +104,7 @@ int main(int argc, char **argv) {
 
   return 0;
 }
+
+/*
+./build/freud.exe -f ./images/input/image.jpeg -c tenth_pixel
+*/
