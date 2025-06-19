@@ -19,6 +19,7 @@ void dimension (char *source_path){
     unsigned char *data;
     int width, height, channels;
     read_image_data(source_path, &data, &width, &height, &channels);
+
     printf("dimension: %d, %d\n", width, height);
 
 }
@@ -66,5 +67,29 @@ void max_pixel(char *source_path) {
 
     printf("max_pixel (%d, %d): %d, %d, %d\n", x, y,
         data[best_pixel * 3], data [best_pixel * 3 + 1], data[best_pixel * 3 + 2]);
+
+}
+
+void min_pixel(char *source_path) {
+    unsigned char *data;
+    int width, height, channels;
+    read_image_data(source_path, &data, &width, &height, &channels);
+    
+    int min_sum = 1000;
+    int best_pixel = 0;
+    
+    for (int i = 0; i < width * height; i++) {
+        int sum = data[i * 3] + data[i * 3 + 1] + data[i * 3 + 2];
+
+        if (sum < min_sum) {
+            min_sum = sum;
+            best_pixel = i;
+        }
+    }
+    int x = best_pixel % width;
+    int y = best_pixel / width;
+
+    printf("min_pixel ( %d, %d): %d, %d, %d\n", x, y,
+        data[best_pixel * 3], data[best_pixel * 3 + 1], data[best_pixel * 3 + 2]);
 
 }
