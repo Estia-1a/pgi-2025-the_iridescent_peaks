@@ -46,13 +46,11 @@ int main(int argc, char **argv) {
       tenth_pixel( configuration.filenames[0] );
   }
 
-  if ( strncmp( configuration.command, "second_line", 11 ) == 0 ) {
-    second_line( configuration.filenames[0] );
-  }
 
-  /*
-   * TO COMPLETE
-   */
+  if ( strncmp( configuration.command, "max_pixel", 9) == 0 ) {
+    max_pixel( configuration.filenames[0] );
+  }
+  
   
   return 0;
 }
