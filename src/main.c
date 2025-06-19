@@ -47,12 +47,6 @@ int main(int argc, char **argv) {
   if ( strncmp( configuration.command, "second_line", 11 ) == 0 ) {
     second_line( configuration.filenames[0] );
   }
-
-  /*
-   * TO COMPLETE
-   */
-  
-  } 
   if ( strncmp( configuration.command, "color_red", 9) == 0){
     if (configuration.filenames[0]== NULL){
       fprintf(stderr,"Aucune image fourni.\n");
