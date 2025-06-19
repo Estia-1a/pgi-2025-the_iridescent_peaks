@@ -83,5 +83,5 @@ int main(int argc, char **argv) {
 }
 
 /*
-./build/freud.exe -f ./images/input/image.jpeg -c dimension
+./build/freud.exe -f ./images/input/image.jpeg -c tenth_pixel
 */
