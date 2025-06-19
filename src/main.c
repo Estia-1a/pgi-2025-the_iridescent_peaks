@@ -101,9 +101,12 @@ int main(int argc, char **argv) {
       tenth_pixel( configuration.filenames[0] );
   }
 
-  if ( strncmp( configuration.command, "second_line", 11 ) == 0 ) {
-    second_line( configuration.filenames[0] );
+
+  if ( strncmp( configuration.command, "max_pixel", 9) == 0 ) {
+    max_pixel( configuration.filenames[0] );
   }
+  
+  
   if ( strncmp( configuration.command, "color_red", 9) == 0){
     if (configuration.filenames[0]== NULL){
       fprintf(stderr,"Aucune image fourni.\n");

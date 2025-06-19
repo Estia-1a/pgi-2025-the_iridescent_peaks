@@ -163,14 +163,32 @@ void tenth_pixel (char *source_path){
     read_image_data(source_path, &data, &width, &height, &channels);
     printf("tenth_pixel: %d, %d, %d\n", data[27], data[28], data[29]);
 
-
 }
 
-void second_line(char *source_path) {
+void max_pixel(char *source_path) {
     unsigned char *data;
     int width, height, channels;
-
     read_image_data(source_path, &data, &width, &height, &channels);
 
-    printf("second_line: %d, %d, %d\n", data[3 * width], data[3 * width + 1], data[3 * width + 2]);
+    int max_sum = 0;
+    int best_pixel = 0;
+
+    for (int i = 0; i < width * height; i++) {
+        int r = data[i * 3];
+        int g = data[i * 3 + 1];
+        int b = data[i * 3 + 2];
+        int sum = r + g + b;
+
+        if (sum> max_sum) {
+            max_sum = sum;
+            best_pixel = i;
+        }
+    }
+
+    int x = best_pixel % width;
+    int y = best_pixel / width;
+
+    printf("max_pixel (%d, %d): %d, %d, %d\n", x, y,
+        data[best_pixel * 3], data [best_pixel * 3 + 1], data[best_pixel * 3 + 2]);
+
 }
