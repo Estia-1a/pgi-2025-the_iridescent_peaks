@@ -8,7 +8,7 @@ typedef struct _pixelRGB {
    char R ; 
 } pixelRGB ;
 
-pixelRGB* get_pixel(char* data, const int width, const int height, const int channel_count, const int x, const int y);
+pixelRGB* get_pixel(unsigned char* data, const unsigned int width, const unsigned int height, const unsigned int channel_count, const unsigned int x, const unsigned int y);
 void print_pixel(char *filename,int x, int y);
 
 
