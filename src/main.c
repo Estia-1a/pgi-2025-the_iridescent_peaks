@@ -30,10 +30,7 @@ int main(int argc, char **argv) {
   if ( strncmp( configuration.command, "helloworld", 10 ) == 0 ) {
     /* helloworld() function is defined in feature.h and implemented in feature.c */
     helloWorld();
-  }
-  /*
-   * TO COMPLETE
-   */
-  
+  } 
+
   return 0;
 }
