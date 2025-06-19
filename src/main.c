@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include <estia-image.h>
 #include <getopt.h>
-
 #include "features.h"
 #include "utils.h"
 #include "argsparse.h"
@@ -31,6 +29,26 @@ int main(int argc, char **argv) {
     /* helloworld() function is defined in feature.h and implemented in feature.c */
     helloWorld();
   } 
+  if ( strncmp( configuration.command, "color_red", 9) == 0){
+    if (configuration.filenames[0]== NULL){
+      fprintf(stderr,"Aucun fichier image fourni.\n");
+      return 1;
+    }
+    color_red(configuration.filenames[0]);
+  }
+  else if ( strncmp( configuration.command, "print_pixel", 11) == 0){
+    int arg_count = 0;
+    while (configuration.arguments[arg_count] != NULL){
+      arg_count++;
+    }
+    if (arg_count < 2){
+      fprintf(stderr,"fournir les coordonées X et Y.\n");
+      return 1;
+    }
+    int x =atoi(configuration.arguments[0]);
+    int y =atoi(configuration.arguments[1]);
+    print_pixel(configuration.filenames[0], x, y);
+  }
 
   return 0;
 }
