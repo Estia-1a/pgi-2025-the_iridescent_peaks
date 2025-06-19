@@ -33,6 +33,28 @@
     }
     free(data);
  }
+void color_green(const char *filename){
+    unsigned char *data;
+    int width, height, channel_count;
+    if (read_image_data((char*)filename, &data, &width, &height, &channel_count) == 0){
+        fprintf(stderr,"impossible de lire l'image.\n");
+        return;
+    }
+    int total = width * height;
+    for (int i = 0; i < total; i++){
+        int idx = i * channel_count;
+        if (channel_count >=3){
+            data[idx + 0]=0;
+            data[idx + 2]=0;
+        }
+    }
+    if (write_image_data("image_out.bmp", data, width, height)==0){
+        fprintf(stderr,"échec de l'écriture de l'image.\n");
+    } else {
+        printf("L'image toute verte est enregistrée sous 'image_out.bmp'.\n");
+    }
+    free(data);
+}
  /* Do not forget to commit regurlarly your changes.
  * Your commit messages must contain "#n" with: n = number of the corresponding feature issue.
  * When the feature is totally implemented, your commit message must contain "close #n".

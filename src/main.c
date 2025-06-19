@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
   } 
   if ( strncmp( configuration.command, "color_red", 9) == 0){
     if (configuration.filenames[0]== NULL){
-      fprintf(stderr,"Aucun fichier image fourni.\n");
+      fprintf(stderr,"Aucune image fourni.\n");
       return 1;
     }
     color_red(configuration.filenames[0]);
@@ -48,6 +48,13 @@ int main(int argc, char **argv) {
     int x =atoi(configuration.arguments[0]);
     int y =atoi(configuration.arguments[1]);
     print_pixel(configuration.filenames[0], x, y);
+  }
+  else if ( strncmp( configuration.command, "color_green", 11) == 0){
+    if (configuration.filenames[0]== NULL){
+      fprintf(stderr,"Aucune image fourni.\n");
+      return 1;
+    }
+    color_green(configuration.filenames[0]);
   }
 
   return 0;
