@@ -56,6 +56,20 @@ int main(int argc, char **argv) {
     }
     color_green(configuration.filenames[0]);
   }
+  else if ( strncmp( configuration.command, "color_blue", 10) == 0){
+    if (configuration.filenames[0]== NULL){
+      fprintf(stderr,"Aucune image fourni.\n");
+      return 1;
+    }
+    color_blue(configuration.filenames[0]);
+  }
+  else if ( strncmp( configuration.command, "color_gray", 10) == 0){
+    if (configuration.filenames[0]== NULL){
+      fprintf(stderr,"Aucune image fourni.\n");
+      return 1;
+    }
+    color_gray(configuration.filenames[0]);
+  }
 
   return 0;
 }
