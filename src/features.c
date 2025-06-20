@@ -261,7 +261,7 @@ void max_component(char *source_path, char component) {
 
 
 
-    void min_component(char *source_path, char component) {
+void min_component(char *source_path, char component) {
     unsigned char *data;
     int width, height, channels;
     int min_value = 255;
@@ -290,3 +290,41 @@ void max_component(char *source_path, char component) {
         
         free(data);
     }
+
+void stat_report(char *source_path) {
+    FILE *file = fopen("stat_report.txt", "w");
+    if (file == NULL) {
+        fprintf(stderr, "erreur");
+        return;
+    }
+
+
+    max_pixel (source_path);
+    fprintf(file, "\n");
+
+    min_pixel (source_path);
+    fprintf(file, "\n");
+
+    max_component (source_path, 'R');
+    fprintf(file, "\n");
+
+    max_component (source_path, 'G');
+    fprintf(file, "\n");
+
+    max_component (source_path, 'B');
+    fprintf(file, "\n");
+
+
+    min_component (source_path, 'R');
+    fprintf(file, "\n");
+
+    min_component (source_path, 'G');
+    fprintf(file, "\n");
+
+    min_component (source_path, 'B');
+    fprintf(file, "\n");
+
+
+
+    printf("rapport : stat_report.txt\n");
+}
