@@ -19,7 +19,7 @@ void print_pixel(char *filename,int x,int y){
     int width, height, channel_count;
 
     if (read_image_data(filename, &data, &width, &height, &channel_count) !=0 ) {
-       fprintf(stderr,"Erreur lors de la lecture de l'image : %s\n",filename);
+       fprintf(stderr,"lecture de l'image erroner: %s\n",filename);
        return;
     }
 
