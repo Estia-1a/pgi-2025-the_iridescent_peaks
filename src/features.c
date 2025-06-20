@@ -11,7 +11,7 @@
     int width = 0, height = 0, channel_count = 0;
     int success = read_image_data(filename, &data, &width, &height, &channel_count);
     if (success == 0 || data == NULL ){
-        fprintf(stderr,"[Erreur] Echec de la lecture de l'image : %s\n", filename);
+        fprintf(stderr,"Echec de la lecture de l'image : %s\n", filename);
         return;
     }
 
