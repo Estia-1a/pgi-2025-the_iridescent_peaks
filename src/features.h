@@ -3,5 +3,6 @@
 
 
 void helloWorld();
-
+void color_grey_luminance (char *chemin_image);
 #endif
+

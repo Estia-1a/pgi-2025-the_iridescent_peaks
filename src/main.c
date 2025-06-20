@@ -31,9 +31,8 @@ int main(int argc, char **argv) {
     /* helloworld() function is defined in feature.h and implemented in feature.c */
     helloWorld();
   }
-  /*
-   * TO COMPLETE
-   */
-  
+  if (strncmp(configuration.command, "color_grey_luminance", 21)==0) {
+  color_grey_luminance(configuration.filenames[0]);
+  }
   return 0;
 }
