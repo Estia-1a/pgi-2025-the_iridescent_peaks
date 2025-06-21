@@ -355,3 +355,166 @@ void stat_report(char *source_path) {
 
     printf("rapport : stat_report.txt\n");
 }
+
+void mirror_total(const char *filename) {
+    int w, h, ch;
+    unsigned char *src = NULL;
+    read_image_data(filename, &src, &w, &h, &ch);
+
+    unsigned char *dst = malloc(w * h * ch);
+
+    for (int y = 0; y < h; y++) {
+        for (int x = 0; x < w; x++) {
+            int src_idx = (y * w + x) * ch;
+            int dst_idx = ((h - 1 - y) * w + (w - 1 - x)) * ch;
+            for (int c = 0; c < ch; c++) {
+                dst[dst_idx + c] = src[src_idx + c];
+            }
+        }
+    }
+
+    if (write_image_data("image_out.bmp", dst, w, h) != 0) {
+        free_image_data(dst);
+    }
+    if (write_image_data("image_out.bmp", dst, w, h)) {
+        printf("Image output.bmp (miroir) a ete générée\n");
+    } else {
+        fprintf(stderr, "Pas de mirror_total()\n");
+    }
+
+
+    free_image_data(src);
+    free(dst);
+}
+
+
+
+void crop_and_resize(const char *filepath, int center_x, int center_y, int target_width, int target_height) {
+    int img_width, img_height, num_channels;
+    unsigned char *image_data = NULL;
+
+    read_image_data(filepath, &image_data, &img_width, &img_height, &num_channels);
+
+    int half_w = target_width / 2;
+    int half_h = target_height / 2;
+
+    int crop_x_start = center_x - half_w;
+    int crop_y_start = center_y - half_h;
+    int crop_x_end = center_x + half_w;
+    int crop_y_end = center_y + half_h;
+
+    if (crop_x_start < 0) {
+        target_width += crop_x_start;
+        crop_x_start = 0;
+    }
+    if (crop_x_end >= img_width) {
+        target_width -= (crop_x_end - img_width + 1);
+    }
+    if (crop_y_start < 0) {
+        target_height += crop_y_start;
+        crop_y_start = 0;
+    }
+    if (crop_y_end >= img_height) {
+        target_height -= (crop_y_end - img_height + 1);
+    }
+
+    unsigned char *cropped_data = (unsigned char *)malloc(target_width * target_height * num_channels);
+
+    for (int row = 0; row < target_height; row++) {
+        for (int col = 0; col < target_width; col++) {
+            int source_x = crop_x_start + col;
+            int source_y = crop_y_start + row;
+
+            int source_index = (source_y * img_width + source_x) * num_channels;
+            int dest_index = (row * target_width + col) * num_channels;
+
+            for (int ch = 0; ch < num_channels; ch++) {
+                cropped_data[dest_index + ch] = image_data[source_index + ch];
+            }
+        }
+    }
+}
+
+void scale_nearest(char* filename, float a) {
+    int width, height, channels;
+    unsigned char* input_data = NULL;
+
+    read_image_data(filename, &input_data, &width, &height, &channels);
+
+    int scaled_w = (int)(width * a);
+    int scaled_h = (int)(height * a);
+
+    unsigned char* output_data = (unsigned char*)malloc(scaled_w * scaled_h * channels);
+
+    for (int j = 0; j < scaled_h; j++) {
+        for (int i = 0; i < scaled_w; i++) {
+            int nearest_x = (int)(i / a);
+            int nearest_y = (int)(j / a);
+
+            int src_idx = (nearest_y * width + nearest_x) * channels;
+            int dst_idx = (j * scaled_w + i) * channels;
+
+            for (int c = 0; c < channels; c++) {
+                output_data[dst_idx + c] = input_data[src_idx + c];
+            }
+        }
+    }
+
+    if (write_image_data("image_out.bmp", output_data, scaled_w, scaled_h) == 0) {
+        free(output_data);
+    }
+
+    free_image_data(input_data);
+}
+
+void scale_bilinear(const char *filename, float scale) {
+    int width, height, channels;
+    unsigned char* input_data = NULL;
+
+    read_image_data(filename, &input_data, &width, &height, &channels);
+
+    int resized_w = (int)(width * scale);
+    int resized_h = (int)(height * scale);
+
+    unsigned char* output = (unsigned char*)malloc(resized_w * resized_h * channels);
+
+    for (int y = 0; y < resized_h; y++) {
+        for (int x = 0; x < resized_w; x++) {
+
+            float src_x = x / scale;
+            float src_y = y / scale;
+
+            int x1 = (int)src_x;
+            int y1 = (int)src_y;
+
+            int x2 = (x1 + 1 < width)  ? x1 + 1 : x1;
+            int y2 = (y1 + 1 < height) ? y1 + 1 : y1;
+
+            float dx = src_x - x1;
+            float dy = src_y - y1;
+
+            for (int c = 0; c < channels; c++) {
+                float top_left     = input_data[(y1 * width + x1) * channels + c];
+                float top_right    = input_data[(y1 * width + x2) * channels + c];
+                float bottom_left  = input_data[(y2 * width + x1) * channels + c];
+                float bottom_right = input_data[(y2 * width + x2) * channels + c];
+
+                float interpolated_value =
+                    (1 - dx) * (1 - dy) * top_left +
+                    dx * (1 - dy) * top_right +
+                    (1 - dx) * dy * bottom_left +
+                    dx * dy * bottom_right;
+
+                output[(y * resized_w + x) * channels + c] = (unsigned char)(interpolated_value);
+            }
+        }
+    }
+
+    if (write_image_data("image_out.bmp", output, resized_w, resized_h) == 0) {
+        free(output);
+    }
+
+    free_image_data(input_data);
+}
+
+

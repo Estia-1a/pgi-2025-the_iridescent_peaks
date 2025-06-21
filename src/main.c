@@ -120,6 +120,32 @@ int main(int argc, char **argv) {
   return 0;
 
 
+  if ( strncmp( configuration.command, "mirror_total", 24 ) == 0 ) {
+    mirror_total( configuration.filenames[0]);
+  }
+
+  if (strncmp(configuration.command, "crop_and_resize", 25) == 0) {
+    int center_x = atoi(configuration.arguments[0]);
+    int center_y = atoi(configuration.arguments[1]);
+    int target_width = atoi(configuration.arguments[2]);
+    int target_height = atoi(configuration.arguments[3]);
+
+    crop_and_resize(configuration.filenames[0], center_x, center_y, target_width, target_height);
+}
+
+if (strncmp(configuration.command, "scale_nearest", 26) == 0) {
+    float scale_factor = strtof(configuration.arguments[0], NULL);
+    char* input_file = configuration.filenames[0];
+
+    scale_nearest(input_file, scale_factor);
+}
+
+if (strncmp(configuration.command, "scale_bilinear", 27) == 0) {
+    float scale_factor = atof(configuration.arguments[0]);
+    const char* input_file = configuration.filenames[0];
+    scale_bilinear(input_file, scale_factor);
+}
+
 }
 
 /*
