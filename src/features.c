@@ -359,7 +359,7 @@ void stat_report(char *source_path) {
 void mirror_total(const char *filename) {
     int w, h, ch;
     unsigned char *src = NULL;
-    read_image_data(filename, &src, &w, &h, &ch);
+    read_image_data((char*)filename, &src, &w, &h, &ch);
 
     unsigned char *dst = malloc(w * h * ch);
 
@@ -393,7 +393,7 @@ void crop_and_resize(const char *filepath, int center_x, int center_y, int targe
     int img_width, img_height, num_channels;
     unsigned char *image_data = NULL;
 
-    read_image_data(filepath, &image_data, &img_width, &img_height, &num_channels);
+    read_image_data((char*)filepath, &image_data, &img_width, &img_height, &num_channels);
 
     int half_w = target_width / 2;
     int half_h = target_height / 2;
@@ -471,7 +471,7 @@ void scale_bilinear(const char *filename, float scale) {
     int width, height, channels;
     unsigned char* input_data = NULL;
 
-    read_image_data(filename, &input_data, &width, &height, &channels);
+    read_image_data((char*)filename, &input_data, &width, &height, &channels);
 
     int resized_w = (int)(width * scale);
     int resized_h = (int)(height * scale);
