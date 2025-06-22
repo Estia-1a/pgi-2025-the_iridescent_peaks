@@ -397,9 +397,9 @@ void mirror_total(char *filename) {
  
     int written = write_image_data("image_out.bmp", data, width, height);
     if (written == 0) {
-        fprintf(stderr, "Impossible d'écrire l'image de sortie.\n");
+        fprintf(stderr, "Impossible d'écrire l'image sortante.\n");
     } else {
-        printf("Image créée : image_out.bmp (miroir total)\n");
+        printf("Image creer : image_out.bmp (miroir total)\n");
     }
  
     free(data);
@@ -407,73 +407,87 @@ void mirror_total(char *filename) {
 
 
 
-void crop_and_resize(const char *filepath, int center_x, int center_y, int target_width, int target_height) {
-    int img_width, img_height, num_channels;
-    unsigned char *image_data = NULL;
-
-    read_image_data(filepath, &image_data, &img_width, &img_height, &num_channels);
-
-    int half_w = target_width / 2;
-    int half_h = target_height / 2;
-
-    int crop_x_start = center_x - half_w;
-    int crop_y_start = center_y - half_h;
-    int crop_x_end = center_x + half_w;
-    int crop_y_end = center_y + half_h;
-
-    if (crop_x_start < 0) {
-        target_width += crop_x_start;
-        crop_x_start = 0;
+void scale_crop(char *filename, int center_x, int center_y, int crop_width, int crop_height) {
+    unsigned char *data = NULL;
+    int width = 0, height = 0, channel_count = 0;
+ 
+    int success = read_image_data(filename, &data, &width, &height, &channel_count);
+    if (success == 0 || data == NULL) {
+        fprintf(stderr, "Echec de la lecture de l'image : %s\n", filename);
+        return;
     }
-    if (crop_x_end >= img_width) {
-        target_width -= (crop_x_end - img_width + 1);
+ 
+    int left = center_x - crop_width / 2;
+    int top = center_y - crop_height / 2;
+    int right = left + crop_width;
+    int bottom = top + crop_height;
+ 
+    if (left < 0) left = 0;
+    if (top < 0) top = 0;
+    if (right > width) right = width;
+    if (bottom > height) bottom = height;
+ 
+    int new_width = right - left;
+    int new_height = bottom - top;
+ 
+    unsigned char *cropped_data = malloc(new_width * new_height * channel_count);
+    if (!cropped_data) {
+        fprintf(stderr, "Erreur d'allocation mémoire\n");
+        free(data);
+        return;
     }
-    if (crop_y_start < 0) {
-        target_height += crop_y_start;
-        crop_y_start = 0;
-    }
-    if (crop_y_end >= img_height) {
-        target_height -= (crop_y_end - img_height + 1);
-    }
-
-    unsigned char *cropped_data = (unsigned char *)malloc(target_width * target_height * num_channels);
-
-    for (int row = 0; row < target_height; row++) {
-        for (int col = 0; col < target_width; col++) {
-            int source_x = crop_x_start + col;
-            int source_y = crop_y_start + row;
-
-            int source_index = (source_y * img_width + source_x) * num_channels;
-            int dest_index = (row * target_width + col) * num_channels;
-
-            for (int ch = 0; ch < num_channels; ch++) {
-                cropped_data[dest_index + ch] = image_data[source_index + ch];
+ 
+    for (int y = 0; y < new_height; y++) {
+        for (int x = 0; x < new_width; x++) {
+            for (int c = 0; c < channel_count; c++) {
+                cropped_data[(y * new_width + x) * channel_count + c] =
+                    data[((y + top) * width + (x + left)) * channel_count + c];
             }
         }
     }
+ 
+    int written = write_image_data("image_out.bmp", cropped_data, new_width, new_height);
+    if (written == 0) {
+        fprintf(stderr, "Impossible d'écrire l'image sortante.\n");
+    } else {
+        printf("Image creer : image_out.bmp (crop)\n");
+    }
+ 
+    free(data);
+    free(cropped_data);
 }
 
-void scale_nearest(char* filename, float a) {
-    int width, height, channels;
-    unsigned char* input_data = NULL;
-
-    read_image_data(filename, &input_data, &width, &height, &channels);
-
-    int scaled_w = (int)(width * a);
-    int scaled_h = (int)(height * a);
-
-    unsigned char* output_data = (unsigned char*)malloc(scaled_w * scaled_h * channels);
-
-    for (int j = 0; j < scaled_h; j++) {
-        for (int i = 0; i < scaled_w; i++) {
-            int nearest_x = (int)(i / a);
-            int nearest_y = (int)(j / a);
-
-            int src_idx = (nearest_y * width + nearest_x) * channels;
-            int dst_idx = (j * scaled_w + i) * channels;
-
-            for (int c = 0; c < channels; c++) {
-                output_data[dst_idx + c] = input_data[src_idx + c];
+void scale_nearest(char *filename, float scale) {
+    unsigned char *data = NULL;
+    int width = 0, height = 0, channel_count = 0;
+ 
+    int success = read_image_data(filename, &data, &width, &height, &channel_count);
+    if (success == 0 || data == NULL) {
+        fprintf(stderr, "Erreur de lecture de l'image : %s\n", filename);
+        return;
+    }
+ 
+    int new_width = (int)(width * scale);
+    int new_height = (int)(height * scale);
+ 
+    unsigned char *scaled_data = malloc(new_width * new_height * channel_count);
+    if (!scaled_data) {
+        fprintf(stderr, "Erreur d'allocation mémoire pour l'image redimensionnée.\n");
+        free(data);
+        return;
+    }
+ 
+    for (int y = 0; y < new_height; y++) {
+        int src_y = (int)(y / scale);
+        if (src_y >= height) src_y = height - 1;
+ 
+        for (int x = 0; x < new_width; x++) {
+            int src_x = (int)(x / scale);
+            if (src_x >= width) src_x = width - 1;
+ 
+            for (int c = 0; c < channel_count; c++) {
+                scaled_data[(y * new_width + x) * channel_count + c] =
+                    data[(src_y * width + src_x) * channel_count + c];
             }
         }
     }
@@ -489,20 +503,35 @@ void scale_nearest(char* filename, float a) {
     free(scaled_data);
 }
 
-void scale_bilinear(const char *filename, float scale) {
-    int width, height, channels;
-    unsigned char* input_data = NULL;
-
-    read_image_data(filename, &input_data, &width, &height, &channels);
-
-    int resized_w = (int)(width * scale);
-    int resized_h = (int)(height * scale);
-
-    unsigned char* output = (unsigned char*)malloc(resized_w * resized_h * channels);
-
-    for (int y = 0; y < resized_h; y++) {
-        for (int x = 0; x < resized_w; x++) {
-
+void scale_bilinear(char *filename, float scale) {
+    unsigned char *data = NULL;
+    int width = 0, height = 0, channel_count = 0;
+ 
+    int success = read_image_data(filename, &data, &width, &height, &channel_count);
+    if (success == 0 || data == NULL) {
+        fprintf(stderr, "Echec de la lecture de l'image : %s\n", filename);
+        return;
+    }
+ 
+    int new_width = (int)(width * scale);
+    int new_height = (int)(height * scale);
+ 
+    unsigned char *scaled_data = malloc(new_width * new_height * channel_count);
+    if (scaled_data == NULL) {
+        fprintf(stderr, "Erreur d'allocation mémoire.\n");
+        free(data);
+        return;
+    }
+ 
+    for (int y = 0; y < new_height; y++) {
+        float src_y = y / scale;
+        int y0 = (int)src_y;
+        int y1 = y0 + 1;
+        float dy = src_y - y0;
+ 
+        if (y1 >= height) y1 = height - 1;
+ 
+        for (int x = 0; x < new_width; x++) {
             float src_x = x / scale;
             int x0 = (int)src_x;
             int x1 = x0 + 1;
