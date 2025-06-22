@@ -528,9 +528,9 @@ void scale_bilinear(const char *filename, float scale) {
  
     int written = write_image_data("image_out.bmp", scaled_data, new_width, new_height);
     if (written == 0) {
-        fprintf(stderr, "Impossible d'écrire l'image de sortie.\n");
+        fprintf(stderr, "Impossible d'écrire l'image sortante.\n");
     } else {
-        printf("Image créée : image_out.bmp (bilinear, facteur %.2f)\n", scale);
+        printf("Image creer : image_out.bmp (bilinear, facteur %.2f)\n", scale);
     }
  
     free(data);
