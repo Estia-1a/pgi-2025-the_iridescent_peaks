@@ -605,5 +605,3 @@ void color_desaturate(char *filename) {
  
     free(data);
 }
-
-
