@@ -480,9 +480,9 @@ void scale_nearest(char* filename, float a) {
  
     int written = write_image_data("image_out.bmp", scaled_data, new_width, new_height);
     if (written == 0) {
-        fprintf(stderr, "Impossible d'écrire l'image de sortie.\n");
+        fprintf(stderr, "Impossible d'écrire l'image sortante.\n");
     } else {
-        printf("Image créée : image_out.bmp (redimensionnée x%.2f)\n", scale);
+        printf("Image creer : image_out.bmp (redimensionnée x%.2f)\n", scale);
     }
  
     free(data);

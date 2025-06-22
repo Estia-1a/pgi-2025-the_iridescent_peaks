@@ -31,4 +31,5 @@ void scale_nearest(char *filename, float scale);
 void scale_bilinear(char *filename, float scale);
 void color_desaturate(char *filename);
 
+
 #endif
