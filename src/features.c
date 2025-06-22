@@ -569,9 +569,9 @@ void color_desaturate(char *filename) {
  
     int written = write_image_data("image_out.bmp", data, width, height);
     if (written == 0) {
-        fprintf(stderr, "Impossible d'écrire l'image de sortie.\n");
+        fprintf(stderr, "Impossible d'écrire l'image sortante.\n");
     } else {
-        printf("Image créée : image_out.bmp (désaturée)\n");
+        printf("Image creer : image_out.bmp (désaturée)\n");
     }
  
     free(data);
